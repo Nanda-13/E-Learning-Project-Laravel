@@ -3,9 +3,12 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Cart;
+use App\Models\Lesson;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Authenticatable
 {
@@ -19,8 +22,17 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'nickname',
         'email',
         'password',
+        'phone',
+        'address',
+        'profile',
+        'role',
+        'provider',
+        'provider_id',
+        'provider_token',
+
     ];
 
     /**
@@ -44,5 +56,12 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function cart(): BelongsToMany
+    {
+        return $this->belongsToMany(Lesson::class, 'carts')
+            ->using(Cart::class)
+            ->withTimestamps();
     }
 }
